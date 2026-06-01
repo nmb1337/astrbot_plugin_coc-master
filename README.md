@@ -1,14 +1,118 @@
-# astrbot-plugin-helloworld
+# astrbot_plugin_cultivation
 
-AstrBot 插件模板 / A template plugin for AstrBot plugin feature
+🧘 群聊修仙修炼插件 —— 适用于 [AstrBot](https://github.com/AstrBotDevs/AstrBot) 的多人修仙 RPG 系统。
 
-> [!NOTE]
-> This repo is just a template of [AstrBot](https://github.com/AstrBotDevs/AstrBot) Plugin.
-> 
-> [AstrBot](https://github.com/AstrBotDevs/AstrBot) is an agentic assistant for both personal and group conversations. It can be deployed across dozens of mainstream instant messaging platforms, including QQ, Telegram, Feishu, DingTalk, Slack, LINE, Discord, Matrix, etc. In addition, it provides a reliable and extensible conversational AI infrastructure for individuals, developers, and teams. Whether you need a personal AI companion, an intelligent customer support agent, an automation assistant, or an enterprise knowledge base, AstrBot enables you to quickly build AI applications directly within your existing messaging workflows.
+玩家可在群内注册修炼身份，通过发言自动增长修为；管理员可通过 WebUI 面板直接管理所有玩家的属性数据。
 
-# Supports
+## ✨ 功能特性
 
-- [AstrBot Repo](https://github.com/AstrBotDevs/AstrBot)
-- [AstrBot Plugin Development Docs (Chinese)](https://docs.astrbot.app/dev/star/plugin-new.html)
-- [AstrBot Plugin Development Docs (English)](https://docs.astrbot.app/en/dev/star/plugin-new.html)
+- **8 项角色属性**：道号、修为、攻击、防御、速度、心性、灵石、背包物品
+- **发言自动修炼**：白名单群内，已注册玩家每发一条消息自动增加修为（增加值可配置）
+- **玩家自助指令**：通过 `/修炼` 指令组注册、查看状态、修改各项属性、管理背包
+- **群内排行榜**：按修为排名，支持分页浏览
+- **WebUI 管理面板**：管理员可在网页端以表格形式查看并直接编辑所有成员的 8 项数值
+- **群聊白名单**：仅白名单内的群聊可使用插件，白名单通过 WebUI 配置或管理指令管理
+- **属性基础值可配**：新注册玩家的默认攻击/防御/速度/心性/灵石/背包均可在 WebUI 设置
+
+## 🚀 快速开始
+
+1. 将本插件放入 AstrBot 的 `data/plugins/` 目录
+2. 在 AstrBot WebUI 中启用插件
+3. 在插件设置页配置 **群聊白名单**（`group_whitelist`），填入需要启用修炼的群号
+4. 在插件设置页按需调整各项**基础属性值**和**每次发言修为增量**
+
+## 🎮 玩家指令
+
+所有指令以 `/修炼` 为前缀，仅可在白名单群聊中使用。
+
+### 注册与状态
+
+| 指令 | 说明 |
+|------|------|
+| `/修炼 注册 <道号>` | 注册修炼身份，自动赋予基础属性 |
+| `/修炼 状态 [@某人]` | 查看自己或指定 @用户 的修炼状态 |
+
+### 属性设置
+
+| 指令 | 说明 |
+|------|------|
+| `/修炼 设置 姓名 <新道号>` | 修改道号 |
+| `/修炼 设置 修为 <数值>` | 修改修为 |
+| `/修炼 设置 攻击 <数值>` | 修改攻击力 |
+| `/修炼 设置 防御 <数值>` | 修改防御力 |
+| `/修炼 设置 速度 <数值>` | 修改速度 |
+| `/修炼 设置 心性 <数值>` | 修改心性 |
+| `/修炼 设置 灵石 <数值>` | 修改灵石数 |
+
+### 背包管理
+
+| 指令 | 说明 |
+|------|------|
+| `/修炼 背包 添加 <物品>` | 添加物品到背包 |
+| `/修炼 背包 移除 <物品>` | 从背包移除物品 |
+| `/修炼 背包 列表` | 查看背包内容 |
+
+### 排行
+
+| 指令 | 说明 |
+|------|------|
+| `/修炼 排行 [页码]` | 查看本群修为排行榜（每页10人） |
+
+## 🛡️ 管理员指令（仅 AstrBot 管理员可用）
+
+| 指令 | 说明 |
+|------|------|
+| `/修炼 白名单 添加 <群号>` | 将群加入白名单 |
+| `/修炼 白名单 移除 <群号>` | 从白名单移除 |
+| `/修炼 白名单 列表` | 查看当前白名单 |
+
+## ⚙️ 配置项
+
+在 AstrBot WebUI → 插件设置 中可配置以下参数：
+
+| 配置项 | 类型 | 默认值 | 说明 |
+|--------|------|--------|------|
+| `cultivation_per_message` | int | 1 | 每次发言增加的修为值 |
+| `base_cultivation` | int | 0 | 新玩家修为基础值 |
+| `base_attack` | int | 10 | 新玩家攻击基础值 |
+| `base_defense` | int | 10 | 新玩家防御基础值 |
+| `base_speed` | int | 10 | 新玩家速度基础值 |
+| `base_mind` | int | 10 | 新玩家心性基础值 |
+| `base_spirit_stones` | int | 0 | 新玩家灵石基础值 |
+| `base_backpack` | list | `[]` | 新玩家背包基础物品 |
+| `group_whitelist` | list | `[]` | 群聊白名单（群号列表） |
+
+## 🖥️ WebUI 管理面板
+
+插件详情页提供「修炼管理面板」，包含两个标签页：
+
+- **玩家管理**：表格展示所有玩家数据，支持行内编辑、搜索筛选、分页浏览、背包弹窗编辑、删除玩家
+- **白名单管理**：可视化添加/移除白名单群号
+
+## 📁 数据存储
+
+玩家数据存储在 `data/plugin_data/astrbot_plugin_cultivation/players.json`，结构如下：
+
+```json
+{
+  "players": {
+    "群号": {
+      "用户ID": {
+        "name": "道号",
+        "cultivation": 0,
+        "attack": 10,
+        "defense": 10,
+        "speed": 10,
+        "mind": 10,
+        "spirit_stones": 0,
+        "backpack": []
+      }
+    }
+  }
+}
+```
+
+## 🔗 相关链接
+
+- [AstrBot 项目主页](https://github.com/AstrBotDevs/AstrBot)
+- [AstrBot 插件开发文档](https://docs.astrbot.app/dev/star/plugin-new.html)
