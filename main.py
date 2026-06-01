@@ -153,8 +153,8 @@ class CultivationPlugin(Star):
         group_id = event.message_obj.group_id
         user_id = event.get_sender_id()
         player = self._get_player(group_id, user_id)
-        if player is None:
-            return  # 未注册，忽略
+        if player is None or not player.get("name"):
+            return  # 未注册或数据不完整，忽略
 
         await self._add_cultivation(group_id, user_id)
 
@@ -583,7 +583,21 @@ class CultivationPlugin(Star):
             if field not in allowed_fields:
                 return jsonify({"ok": False, "msg": f"不允许的字段: {field}"}), 400
 
-            player = self._ensure_player(group_id, user_id)
+            # 若玩家不存在，先用基础值初始化，防止产生数据不完整的"幽灵玩家"
+            existing = self._get_player(group_id, user_id)
+            if existing is None:
+                base = self._get_base_values()
+                player = self._ensure_player(group_id, user_id)
+                player["name"] = ""
+                player["cultivation"] = base["cultivation"]
+                player["attack"] = base["attack"]
+                player["defense"] = base["defense"]
+                player["speed"] = base["speed"]
+                player["mind"] = base["mind"]
+                player["spirit_stones"] = base["spirit_stones"]
+                player["backpack"] = list(base["backpack"])
+            else:
+                player = existing
 
             # 类型转换
             if field == "backpack":
