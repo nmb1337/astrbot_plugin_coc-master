@@ -1,0 +1,56 @@
+{
+  "cultivation_per_message": {
+    "description": "每次发言增加的修为值",
+    "type": "int",
+    "default": 1,
+    "hint": "玩家在群内每发送一条消息，修为增加此数值"
+  },
+  "base_cultivation": {
+    "description": "修为基础值",
+    "type": "int",
+    "default": 0,
+    "hint": "新注册玩家修为的默认值"
+  },
+  "base_attack": {
+    "description": "攻击基础值",
+    "type": "int",
+    "default": 10,
+    "hint": "新注册玩家攻击力的默认值"
+  },
+  "base_defense": {
+    "description": "防御基础值",
+    "type": "int",
+    "default": 10,
+    "hint": "新注册玩家防御力的默认值"
+  },
+  "base_speed": {
+    "description": "速度基础值",
+    "type": "int",
+    "default": 10,
+    "hint": "新注册玩家速度的默认值"
+  },
+  "base_mind": {
+    "description": "心性基础值",
+    "type": "int",
+    "default": 10,
+    "hint": "新注册玩家心性的默认值"
+  },
+  "base_spirit_stones": {
+    "description": "灵石基础值",
+    "type": "int",
+    "default": 0,
+    "hint": "新注册玩家灵石的默认值"
+  },
+  "base_backpack": {
+    "description": "背包基础物品（JSON数组）",
+    "type": "list",
+    "default": [],
+    "hint": "新注册玩家背包的默认物品列表，例如 [\"初级丹药\"]"
+  },
+  "group_whitelist": {
+    "description": "群聊白名单",
+    "type": "list",
+    "default": [],
+    "hint": "只有在白名单中的群号才能使用本插件，留空则所有群都无法使用。请填写群号字符串"
+  }
+}

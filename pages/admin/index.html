@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>修炼管理 - 修仙修炼插件</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- 头部 -->
+    <header class="header">
+      <h1>🧘 修仙修炼管理面板</h1>
+      <p class="subtitle">管理所有玩家的修炼数据与群聊白名单</p>
+    </header>
+
+    <!-- 标签页切换 -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="players">👥 玩家管理</button>
+      <button class="tab-btn" data-tab="whitelist">🛡️ 白名单管理</button>
+    </div>
+
+    <!-- ========== 玩家管理标签页 ========== -->
+    <div id="tab-players" class="tab-content active">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <input type="text" id="searchInput" class="search-input" placeholder="🔍 搜索道号或用户ID..." />
+          <select id="groupFilter" class="filter-select">
+            <option value="">全部群聊</option>
+          </select>
+        </div>
+        <div class="toolbar-right">
+          <button id="refreshBtn" class="btn btn-secondary">🔄 刷新数据</button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="playersTable" class="data-table">
+          <thead>
+            <tr>
+              <th>群号</th>
+              <th>用户ID</th>
+              <th>道号</th>
+              <th>修为</th>
+              <th>攻击</th>
+              <th>防御</th>
+              <th>速度</th>
+              <th>心性</th>
+              <th>灵石</th>
+              <th>背包</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="playersTbody">
+            <tr><td colspan="11" class="loading-cell">加载中...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- ========== 白名单管理标签页 ========== -->
+    <div id="tab-whitelist" class="tab-content">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <input type="text" id="newGroupInput" class="search-input" placeholder="输入群号后点击添加..." />
+          <button id="addGroupBtn" class="btn btn-primary">➕ 添加群聊</button>
+        </div>
+        <div class="toolbar-right">
+          <button id="refreshWlBtn" class="btn btn-secondary">🔄 刷新</button>
+        </div>
+      </div>
+
+      <div class="whitelist-list" id="whitelistList">
+        <p class="empty-hint">加载中...</p>
+      </div>
+    </div>
+
+    <!-- Toast 提示 -->
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
