@@ -133,12 +133,17 @@ class CultivationPlugin(Star):
             "backpack": list(self.config.get("base_backpack", [])),
         }
 
-    async def _add_cultivation(self, group_id: str, user_id: str) -> int:
-        """为指定玩家增加修为（发言触发），返回增加后的修为值。"""
-        per_msg = self.config.get("cultivation_per_message", 1) if self.config else 1
+    async def _add_cultivation(self, group_id: str, user_id: str, char_count: int = 0) -> int:
+        """为指定玩家增加修为（发言触发），按字数计算：每100字 = cultivation_per_message 修为。
+        返回增加后的修为值。"""
+        per_100 = self.config.get("cultivation_per_message", 1) if self.config else 1
+        gain = (char_count // 100) * per_100
+        if gain <= 0:
+            p = self._get_player(group_id, user_id)
+            return p.get("cultivation", 0) if p else 0
         player = self._ensure_player(group_id, user_id)
         current = player.get("cultivation", self._get_base_values()["cultivation"])
-        player["cultivation"] = current + per_msg
+        player["cultivation"] = current + gain
         await self._save_data()
         return player["cultivation"]
 
@@ -156,7 +161,8 @@ class CultivationPlugin(Star):
         if player is None or not player.get("name"):
             return  # 未注册或数据不完整，忽略
 
-        await self._add_cultivation(group_id, user_id)
+        char_count = len(event.message_str)
+        await self._add_cultivation(group_id, user_id, char_count)
 
     # ==================== 指令：注册 ====================
 
